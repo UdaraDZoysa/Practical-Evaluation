@@ -13,6 +13,7 @@ import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 public class UrlServiceIMPL implements UrlService {
@@ -46,14 +47,27 @@ public class UrlServiceIMPL implements UrlService {
         return repo.save(m);
     }
 
-    // Find an active short URL by its code
-    public UrlMapping resolve(String code) {
-        return repo.findByShortCodeAndExpiresAtAfter(code, Instant.now()).orElse(null);
-    }
-
     // Delete expired URLs from the database
     @Transactional
     public int purgeExpired() {
         return repo.deleteByExpiresAtBefore(Instant.now());
     }
+
+    public List<UrlMapping> list() {
+        return repo.findAllByOrderByCreatedAtDesc();
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        repo.deleteById(id);
+    }
+
+    @Transactional
+    public UrlMapping resolve(String code) {
+        return repo.findByShortCodeAndExpiresAtAfter(code, Instant.now())
+                .map(u -> { u.setClicks(u.getClicks() + 1); return u; })
+                .orElse(null);
+    }
+
+
 }
