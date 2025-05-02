@@ -22,6 +22,9 @@ public class UrlMapping {
     @Column(nullable = false)
     private Instant expiresAt;
 
+    @Column(nullable = false)
+    private int clicks = 0;
+
     public Long getId() { return id; }
     public String getOriginalUrl() { return originalUrl; }
     public void setOriginalUrl(String originalUrl) { this.originalUrl = originalUrl; }
@@ -31,5 +34,7 @@ public class UrlMapping {
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
     public Instant getExpiresAt() { return expiresAt; }
     public void setExpiresAt(Instant expiresAt) { this.expiresAt = expiresAt; }
+    public int getClicks() { return clicks; }
+    public void setClicks(int clicks) { this.clicks = clicks; }
 
 }
