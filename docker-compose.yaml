@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: url
+      POSTGRES_USER: urluser
+      POSTGRES_PASSWORD: urlpass
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  back:
+    image: udaradezoysa/my-images:back-v1     
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/url
+      SPRING_DATASOURCE_USERNAME: urluser
+      SPRING_DATASOURCE_PASSWORD: urlpass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on: [db]
+    ports: ["8080:8080"]
+    restart: unless-stopped
+
+  front:
+    image: udaradezoysa/my-images:front-v1    
+    depends_on: [back]
+    ports: ["80:80"]
+    restart: unless-stopped
+
+volumes:
+  db-data:
