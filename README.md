@@ -1,74 +1,107 @@
-# URL Shortener — Practical Evaluation
-
-Full‑stack exercise that creates short links, stores them in PostgreSQL, counts
-clicks and redirects.
-
-| Layer | Stack |
-|-------|-------|
-| Back‑end | Spring Boot 3 · JPA / Hibernate · PostgreSQL |
-| Front‑end | React 18 (Vite) · Tailwind 3 · Zustand |
-| Build | Maven Wrapper · npm |
+Sure! Below is your finalized **README.md** content. It’s formatted with GitHub-compatible markdown and ready to **copy-paste** directly into your project root:
 
 ---
 
-## Prerequisites
+````markdown
+# URL Shortener — Practical Evaluation
 
-| Tool | Version | Notes |
-|------|---------|-------|
-| **Java JDK** | 17 or later | Adopt/OpenJDK, Corretto, Temurin… |
-| **Node.js** | 18 or 20 | ships with **npm** |
-| **PostgreSQL** | 14 – 17 | defaults to `postgres://localhost:5432/url` |
+Full‑stack demo that creates short links, stores them in PostgreSQL, counts clicks and redirects.
 
-Edit `back‑end/src/main/resources/application.properties` if your database is
-elsewhere.
+| Layer      | Stack                                          |
+|------------|------------------------------------------------|
+| Back‑end   | Spring Boot 3 · JPA / Hibernate · PostgreSQL   |
+| Front‑end  | React 18 (Vite) · Tailwind 3 · Zustand         |
+| Build      | Maven Wrapper · npm                            |
 
 ---
 
-## Quick start
+## Prerequisites
+
+| Tool         | Version    | Notes                                                        |
+|--------------|------------|--------------------------------------------------------------|
+| **Java JDK** | 17 or later| Temurin, Corretto, OpenJDK …                                 |
+| **Node.js**  | 18 or 20   | Ships with **npm**                                           |
+| **PostgreSQL** | 14–17    | Defaults to `postgres://localhost:5432/url`                 |
+
+> If your database is elsewhere, edit `back-end/src/main/resources/application.properties`.
+
+---
+
+## Quick start (dev mode)
 
 ```bash
-# 1 clone
+# 1. Clone the repo
 git clone https://github.com/UdaraDZoysa/Practical-Evaluation.git
 cd Practical-Evaluation
 
-# 2 back‑end  (macOS / Linux / WSL)
+# 2. Start the back-end (macOS / Linux / WSL)
 cd back-end
 ./mvnw spring-boot:run          # → http://localhost:8080
 
-#    back‑end  (Windows PowerShell / CMD)
+#    Start the back-end (Windows CMD / PowerShell)
 cd back-end
 mvnw spring-boot:run
 
-# 3 front‑end  (new terminal)
+# 3. Start the front-end (new terminal)
 cd url-shortener-frontend
-npm install                     # installs React, Vite, Tailwind …
+npm install
 npm run dev                     # → http://localhost:5173
+````
 
-The dashboard loads any URLs already in the database; New URL opens a
-modal to create more.
+The dashboard shows any existing links from the database.
+Click **New URL** to add more.
 
-## REST API cheatsheet (:8080)
+---
 
-Method	Path	Body / Param	Response 200
-POST	/api/urls	{ "originalUrl": "...", "alias":?, "expiresInDays":? }	{ "shortCode": "abc123" }
-GET	/api/urls	–	list of stored links
-DELETE	/api/urls/{id}	–	–
-GET	/{shortCode}	–	302 redirect, click counter ++
+\## Docker usage (optional)
 
-A Swagger UI is available at /swagger-ui/index.html when the server is
-running.
+Dockerized setup for deployment or containerized local dev:
 
-## Troubleshooting
+* `back-end/Dockerfile` – builds Spring Boot jar (exposes port 8080)
+* `url-shortener-frontend/Dockerfile` – builds static React site (served via Nginx on port 80)
+* `docker-compose.yaml` – runs PostgreSQL + both services
 
-Port already in use
-Back‑end: change server.port in application.properties.
-Front‑end: change vite.config.js.
+### Build & run the whole stack
 
-Database login fails — adjust spring.datasource.* (URL, user, password).
+```bash
+docker compose up --build -d
+# → http://localhost (frontend)
+# → http://localhost:8080/swagger-ui/index.html (backend Swagger)
+```
 
-Tailwind classes don’t compile — run npm install again; you should see
-tailwindcss@^3.x.
+Stop the containers:
 
-## License
+```bash
+docker compose down
+```
 
-MIT — do whatever you like with it.
+---
+
+\## REST API cheat sheet (port 8080)
+
+| Method | Path             | Body / Param                                             | 200 Response                |
+| ------ | ---------------- | -------------------------------------------------------- | --------------------------- |
+| POST   | `/api/urls`      | `{ "originalUrl": "...", "alias":?, "expiresInDays":? }` | `{ "shortCode": "abc123" }` |
+| GET    | `/api/urls`      | –                                                        | List of stored links        |
+| DELETE | `/api/urls/{id}` | –                                                        | –                           |
+| GET    | `/{shortCode}`   | –                                                        | **302 redirect**, click ++  |
+
+Swagger UI available at:
+**`/swagger-ui/index.html`**
+
+---
+
+\## Troubleshooting
+
+| Issue                        | Solution                                                              |
+| ---------------------------- | --------------------------------------------------------------------- |
+| Port already in use          | Change `server.port` or `vite.config.js`.                             |
+| Database login fails         | Update `spring.datasource.*` in the backend `application.properties`. |
+| Tailwind classes not showing | Run `npm install` again; ensure you see `tailwindcss@^3.x`.           |
+
+---
+
+\## License
+
+MIT — free for personal, academic, or commercial use.
+
