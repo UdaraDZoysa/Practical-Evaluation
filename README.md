@@ -1,7 +1,3 @@
-Sure! Below is your finalized **README.md** content. It’s formatted with GitHub-compatible markdown and ready to **copy-paste** directly into your project root:
-
----
-
 ````markdown
 # URL Shortener — Practical Evaluation
 
